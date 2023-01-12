@@ -1,0 +1,178 @@
+* {
+  margin: 2px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  color: rgb(231, 227, 227);
+  display: flex;
+  justify-content: center;
+  background-color: #141526;
+}
+
+section {
+  padding: 22px;
+  margin: 5px;
+  border-radius: 10px;
+  border: 1px solid rgb(231, 227, 227);
+  border-top: none;
+}
+
+main {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  gap: 5px;
+  overflow: hidden;
+}
+
+#system-info {
+  grid-column: 1/3;
+  grid-row: 1/3;
+}
+
+#command-block {
+  grid-column: 3/6;
+  grid-row: 1/4;
+}
+
+#page-settings {
+  grid-column: 1/3;
+  grid-row: 3/4;
+}
+
+#logs {
+  grid-column: 1/-1;
+  grid-row: 4/5;
+}
+
+.btn {
+  border: 1px solid black;
+  min-width: 50px;
+  padding: 5px;
+  overflow: hidden;
+  color: #fff;
+  border-radius: 10px;
+  background-image: linear-gradient(225deg, #204d81 0%, #5f1664 100%);
+  box-shadow: 0 0 0 0 rgba(143, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+  transform: translate(0, -2px);
+  box-shadow: 2px -2px 1px 0 rgba(143, 64, 248, 0.5),
+    -2px 2px 1px 0 rgba(39, 200, 255, 0.5);
+}
+
+.btn:active {
+  background-image: linear-gradient(225deg, #5f1664 0%, #204d81 100%);
+}
+
+.pbar {
+  display: flex;
+  align-items: center;
+}
+
+.progress {
+  box-shadow: 3px 3px 1px -0px #0c0c16;
+  background-color: #27272e;
+  border-radius: 20px;
+  position: relative;
+  margin: 15px 20px;
+  height: 35px;
+  width: 400px;
+}
+
+.progress-done {
+  background: linear-gradient(to left, #261368, #51a5ee);
+  box-shadow: 0 3px 3px -5px #3f259c, 0 2px 5px #496ea2;
+  border-radius: 20px;
+  text-shadow: 2px 4px 6px rgba(28, 28, 28, 0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 85%;
+  width: 0;
+  opacity: 0;
+  transition: 1s ease 0.3s;
+}
+
+.input {
+  color: rgb(149, 133, 226);
+  outline: none;
+  background-color: #141526;
+  border: 1px solid rgb(126, 126, 126);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.input:focus {
+  border: 1px solid rgb(149, 133, 226);
+}
+
+textarea {
+  color: #fff;
+  background-color: black;
+  outline: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: 99%;
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  color: rgb(126, 107, 221);
+  background-color: black;
+}
+
+select {
+  background-color: #141526;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.space-between-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.large {
+  width: 75%;
+}
+
+#command-info {
+  margin: 25px 20px;
+}
+table {
+  border-spacing: 4px;
+  text-align: center;
+  margin-top: 15px;
+  width: 95%;
+}
+
+th,
+td {
+  padding: 4px;
+  border: 1px solid rgb(231, 227, 227);
+  border-top: none;
+  border-right: none;
+}
+
+.nonvisible {
+  display: none;
+}
+
+#uptime {
+  margin: 5px;
+}
+
+.pid-cell {
+  cursor: pointer;
+}

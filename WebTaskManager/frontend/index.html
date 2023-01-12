@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebTaskManager</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="shortcut icon"
+      href="https://cdn-icons.flaticon.com/png/512/5862/premium/5862336.png?token=exp=1653648648~hmac=16076b55c1401056a5a01335fb9b99c4"
+    />
+  </head>
+  <body>
+    <main>
+      <!-- System info section start-->
+      <section id="system-info">
+        <div id="load-avg">Load average in last 1 minute:</div>
+        <div class="pbar">
+          <div>CPU 0</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload0"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 1</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload1"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 2</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload2"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 3</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload3"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 4</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload4"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 5</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload5"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 6</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload6"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 7</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload7"></div>
+          </div>
+        </div>
+        <div class="pbar" style="display: none">
+          <div>CPU 8</div>
+          <div class="progress">
+            <div class="progress-done" id="cpuload8"></div>
+          </div>
+        </div>
+        <div class="sys uptime"></div>
+        <div class="sys temp"></div>
+        <div id="uptime">System up for</div>
+        <div class="space-between-flex">
+          <div class="reshu">
+            <button class="btn" id="reboot">Reboot</button>
+            <button class="btn" id="shutdown">Shutdown</button>
+          </div>
+          <button class="btn" id="cancel">Cancel Shutdown/Reboot</button>
+        </div>
+      </section>
+      <!-- System info section end-->
+      <!-- Command Section start-->
+      <section id="command-block">
+        <div id="command-process">
+          <div id="run-block">
+            <form id="run-form" action="">
+              <label for="run">Run Command:</label>
+              <input class="input large" type="text" id="run" />
+              <input
+                class="btn"
+                type="submit"
+                value="run"
+                id="runbtn"
+                class="btn"
+              />
+            </form>
+          </div>
+          <div id="kill-block">
+            <form id="kill-form" action="">
+              <label for="kill">Kill Command:</label>
+              <input
+                class="input large"
+                autocomplete="off"
+                type="text"
+                id="kill"
+              />
+              <input
+                class="btn"
+                type="submit"
+                value="kill"
+                id="killbtn"
+                class="btn"
+              />
+            </form>
+          </div>
+        </div>
+        <div id="command-info">
+          <p>Ran programs so far:</p>
+          <table class="command-info-table">
+            <tr>
+              <th>PID</th>
+              <th>Command</th>
+              <th>CPU Load</th>
+              <th>Current CPU</th>
+              <th>Allowed CPU(s)</th>
+              <th>Change Allowed CPU(s)</th>
+              <th>Limit CPU Load</th>
+            </tr>
+            <!-- <tr>
+              <td>6897</td>
+              <td>test</td>
+              <td>10%</td>
+              <td>0</td>
+              <td>0, 1</td>
+              <td>
+                <select>
+                  <option value="0">CPU 0</option>
+                  <option value="1">CPU 1</option>
+                  <option value="01">CPU 0, 1</option>
+                </select>
+              </td>
+              <td>
+                <form class="limit-form" action="">
+                  <input
+                    class="input limit-input"
+                    type="text"
+                    placeholder="0-100 | enter to set"
+                    autocomplete="off"
+                  />
+                </form>
+              </td>
+            </tr>
+            <tr>
+              <td>100</td>
+              <td>test</td>
+              <td>10%</td>
+              <td>0</td>
+              <td>0, 1</td>
+              <td>
+                <select>
+                  <option value="0">CPU 0</option>
+                  <option value="1">CPU 1</option>
+                  <option value="01">CPU 0, 1</option>
+                </select>
+              </td>
+              <td>
+                <form class="limit-form" action="">
+                  <input
+                    class="input limit-input"
+                    type="text"
+                    placeholder="0-100 | enter to set"
+                    autocomplete="off"
+                  />
+                </form>
+              </td>
+            </tr> -->
+          </table>
+        </div>
+      </section>
+      <!-- Command Section end-->
+      <!-- Settings Section start-->
+      <section id="page-settings">
+        <div class="settings-block">
+          <input
+            class="input"
+            type="checkbox"
+            name="log"
+            id="update-cb"
+            checked
+          />
+          <label for="update-cb">Update page every:</label>
+          <input
+            class="input"
+            type="text"
+            id="update-sec"
+            value="2"
+            autocomplete="off"
+          />
+          <label for="update-sec">second(s)</label>
+        </div>
+        <div class="settings-block">
+          <input class="input" type="checkbox" name="log" id="log-cb" checked />
+          <label for="log-cb">Log if CPU util. is higher than:</label>
+          <input
+            class="input"
+            type="text"
+            id="log-load"
+            value="70"
+            autocomplete="off"
+          />
+          <label for="log-load">%</label>
+        </div>
+      </section>
+      <!-- Settings Section end-->
+      <!-- Logs Section start-->
+      <section id="logs">
+        <div class="space-between-flex">
+          <div class="log-settings">
+            Display last
+            <input class="input" id="log-entries-input" type="text" value="3" />
+            log entries
+          </div>
+          <div><button id="clear" class="btn">Clear Logs</button></div>
+        </div>
+        <textarea
+          readonly="readonly"
+          name="logs"
+          id="logs-area"
+          cols="190"
+          rows="10"
+        ></textarea>
+      </section>
+      <!-- Logs Section end-->
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

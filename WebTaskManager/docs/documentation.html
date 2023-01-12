@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./content/documentation.css" />
+    <title>Documentation</title>
+  </head>
+  <body>
+    <aside>
+      <ol>
+        <li>
+          <a href="#wtm">WebTaskManager</a>
+          <ol class="h2-li">
+            <li><a href="#structure">Structure of App</a></li>
+          </ol>
+        </li>
+        <li><a href="#getting-started">Getting started</a></li>
+        <li>
+          <a href="#system-info">System Info</a>
+          <ol class="h2-li">
+            <li><a href="#loadavg">Load Average</a></li>
+            <li><a href="#cpu-load">CPU Load</a></li>
+            <li><a href="#sb">System Buttons</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="#command-block">Command Block Section</a>
+          <ol class="h2-li">
+            <li><a href="#run">Run command</a></li>
+            <li><a href="#kill">Kill Command</a></li>
+            <li><a href="#update">Update of the table</a></li>
+          </ol>
+        </li>
+      </ol>
+      <p id="lang">
+        <a href="./documentation.de.html"
+          ><span style="color: #000000">De</span
+          ><span style="color: #dd0000">ut</span
+          ><span style="color: #ffcc00">sch</span></a
+        >
+      </p>
+    </aside>
+    <main>
+      <h1 id="wtm">WebTaskManager</h1>
+      <p>
+        WebTaskManager is a simple task manager that runs in a web browser. It
+        is designed with HTML, CSS and JavaScript for the frontend and no
+        ready-made tools or additional libraries are used, all codes are written
+        by hand. On the server side, C, C++ and a C library libhttp are used. No
+        additional download is required. Library external files and their
+        details are as in the table below. Tested in Chrome and Firefox browsers
+        on virtual machines with 2 and 4 CPUs.
+      </p>
+      <h2 id="structure">Structure of App</h2>
+      <center>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="4">Main</th>
+              <th colspan="3">Frontend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>server.c</td>
+              <td>runCommand.c</td>
+              <td>updateProcess.c</td>
+              <td>limitCpuLoad.cpp</td>
+              <td>app.js</td>
+              <td>index.html</td>
+              <td>style.css</td>
+            </tr>
+            <tr>
+              <td>457 lines</td>
+              <td>100 lines</td>
+              <td>115 lines</td>
+              <td>49 lines</td>
+              <td>635 lines</td>
+              <td>240 lines</td>
+              <td>178 lines</td>
+            </tr>
+          </tbody>
+        </table>
+      </center>
+      <p>
+        The files in the data_files folder are used to exchange data between the
+        frontend and the backend.
+      </p>
+      <h1 id="getting-started">Getting started</h1>
+      <p>
+        To start the application, it is sufficient to type
+        <strong>"make"</strong> on the command line. Press enter twice or use
+        the ctrl+c shortcut to close the program.
+      </p>
+      <p>
+        The program consists of 4 main sections, System info, Command Block,
+        Settings and Logs.
+      </p>
+      <p>
+        The System info section shows us the load average for the last 1 minute,
+        the loads (%) of all CPUs and the System uptime. This section also
+        contains buttons for restarting, shutting down, and canceling these
+        operations.
+      </p>
+      <p>
+        And the second part for the whole process management. In this section,
+        there is an input where we enter the commands to start the terminal, and
+        an input where we can terminate these processes according to the name or
+        process id. In addition, there is a table that contains the information
+        of the processes we run and allows us to perform a few operations on it.
+      </p>
+      <p>
+        The remaining two sections allow us to make minor adjustments to the
+        page and see the logs created by the application.
+      </p>
+      <img src="./content/sections.png" alt="sections" />
+
+      <h1 id="system-info">System Info</h1>
+      <h2 id="loadavg">Load Average</h2>
+      <p>
+        Load Average data is read from the /proc/loadavg file ( server.c 168-182
+        ) and saved in the loadavg.json file in json data format with the
+        incoming server request. Then the frontend reads this data and displays
+        it on the screen ( app.js 183-195 ).
+      </p>
+      <h2 id="cpu-load">CPU Load</h2>
+      <p>
+        I used an algorithm to calculate the processing load of the cores.
+        First, I pulled data from the /proc/stat file. This file contains some
+        CPU related data, We need the data after the first line ( server.c
+        108-136).
+      </p>
+      <img class="img2" src="./content/procstat.png" alt="proc-stat" />
+      <p>
+        Data is then arranged by string operations and listed in an array to
+        perform calculations. The meanings of these data;
+      </p>
+      <ul>
+        <li>
+          1st column : <strong>user</strong> = normal processes executing in
+          user mode
+        </li>
+        <li>
+          2nd column : <strong>nice</strong> = niced processes executing in user
+          mode
+        </li>
+        <li>
+          3rd column : <strong>system</strong> = processes executing in kernel
+          mode
+        </li>
+        <li>4th column : <strong>idle</strong> = twiddling thumbs</li>
+        <li>
+          5th column : <strong>iowait</strong> = waiting for I/O to complete
+        </li>
+        <li>6th column : <strong>irq</strong> = servicing interrupts</li>
+        <li>7th column : <strong>softirq</strong> = servicing softirqs</li>
+      </ul>
+      <p>
+        For the calculation, the following calculation is used in the double
+        data type ( server.c 149-166):
+      </p>
+      <p>u = user + system</p>
+      <p>t = user + system + idle</p>
+      <p>
+        Then it is waited for 1 second and the changes in these data are
+        measured.
+      </p>
+      <p>(u1-u0) * 100 / (t1- t0)</p>
+      <p>The resulting data shows the CPU load.</p>
+      <p>
+        <strong
+          >Control testing of this data was done with gnome-system-monitor and
+          the resulting data is equal.</strong
+        >
+      </p>
+      <p>
+        This operation is done for each CPU and stored in the load.json file as
+        a json array, the first element of this array is the number of
+        processors received with the <strong>“nproc”</strong> command. The
+        response to the incoming ajax http request is refreshed and read by the
+        frontend and displayed on the screen ( app.js 98-123 ).
+      </p>
+      <h3>
+        Why did I choose to wait 1 second at the beginning of this calculation?
+      </h3>
+      <p>
+        Because the server runs on our device, it uses our system's resources.
+        This means sending a lot of server requests for a lot of data refreshed
+        on the screen along with CPU Load. As a result of this situation, it
+        shows a higher value than it should be because the CPU usage increases
+        instantly. That's why I thought it appropriate to wait a second at the
+        beginning.
+      </p>
+      <h2 id="sb">System Buttons</h2>
+      <p>
+        Reboot ( server.c 299-308 ), Shutdown ( server.c 308-318 buttons send a
+        request and these requests trigger the commands between the lines
+        specified.
+      </p>
+      <img class="img3" src="./content/query.png" alt="query" />
+      <p>
+        If this field is left blank, the transaction will take place
+        immediately, if the data is entered, the transaction will take place
+        after the entered minute.
+      </p>
+      <p>
+        Cancel ( server.c 318-321 ) button triggers the "shutdown -c" command.
+      </p>
+      <h1 id="command-block">Command Block Section</h1>
+      <h2 id="run">Run command</h2>
+      <p>
+        Submitting this form sends a request to the server and sends the input
+        value as a parameter. The server.c file decodes this parameter, passes
+        it to the runCommand file and executes it ( server.c 321-331 ). At the
+        same time, the ID of the running process is sent to the pinfo.txt file
+        before it runs to the runCommand file. ”runCommand” reads this info and
+        executes some functions to get name of command, load of process and
+        allowed CPUs of it. This is the first step in creating the table. This
+        data is compiled and written to the processinfo.json file in JSON format
+        ( runCommand.c 92-100 ). With this first data, the table row is
+        generated and displayed on the screen ( app.js 284-332 ).
+      </p>
+      <h2 id="kill">Kill Command</h2>
+      <p>
+        The process of terminating a transaction is quite simple. First, when
+        the form is submitted, it is checked whether the value is a number and
+        accordingly a different ajax http request is sent ( app.js 153-206 ).
+        The backend uses the pkill method if it receives a kill request by name,
+        otherwise it uses some c functions ( server.c 331-339 ).
+      </p>
+      <p class="hint">
+        Hint: You can have it automatically forwarded to the kill command form
+        by double-clicking the ID of a process in the table.
+      </p>
+      <img src="./content/double-click.png" alt="double-click" />
+      <h2 id="update">Update of the table</h2>
+      <p>
+        Modern browsers provide us with
+        <strong>Local Storage and Session Storage</strong>
+        features that we can use as a local database, data in Local Storage is
+        kept until the browser history is deleted, and data in Session Storage
+        is kept until the browser is closed. That's why I used Session Storage
+        quite a few times in this project.
+      </p>
+      <img src="./content/local-database.png" alt="local-database" />
+      <p>
+        In order not to lose the input value when the page is refreshed in the
+        run command, kill command sections, logs and settings section, I saved
+        it in the local database.
+      </p>
+      <p>
+        If the refresh page setting is active in the settings section, the CPU
+        load, Load average, uptime, logs and table part are updated in the
+        selected period. And required data is fetched from local database. But
+        this phase needs some additional backend progress. First of all, the
+        transaction ID is sent as a parameter with the request. This id is
+        handled in updateProcess and goes through almost the same stages as
+        runCommand. Then, by pulling the resulting data from the
+        updatedinfo.json file, it is updated in the table array in Session
+        Storage. It is displayed on the screen when the page is refreshed.
+      </p>
+      <h3>How do runCommand and updateProcess files get the required data?</h3>
+      <p>
+        The file "/proc/&lt;pid&gt;/comm" is read to get the name of the
+        command. For the CPU usage of the process, the command "top -b -n 2 -d 1
+        -p %d | tail -1 | awk '{print $9}' > "./data_files/load.txt" is executed
+        and then the value In order to see the CPU actively used by the process,
+        the "ps -o psr -p &lt;pid&gt; > ./data_files/psr.txt" command is
+        executed and data is drawn from the required file, and the same
+        processes also list the CPU that the process has permission to use. This
+        time the command "taskset -pc &lt;pid&gt; >
+        ./data_files/allowedcpus.txt" is used.
+      </p>
+      <h3>How to change CPU load and active CPU?</h3>
+      <p>
+        To limit the CPU usage of a process, it is sufficient to enter a value
+        between 0 and 100 in the required input in the table and press enter.
+        Then a request is sent to the server and the limitCPULoad file is run (
+        server.c 375-393 ).
+      </p>
+      <p>
+        This file converts the scheduling policy of the process to
+        sched_deadline and provides the restriction with a few additional steps.
+      </p>
+      <p>
+        A similar process above is used to change the active CPU. After you send
+        the data, this request is processed in the Backend and first the
+        scheduling policy is updated with sched_other with the command "sudo
+        chrt -o -p 0 &lt;pid&gt;". Then the command "taskset -pc
+        &lt;affinity&gt; &lt;pid&gt;" is executed and the process is completed (
+        server.c 349-375 ).
+      </p>
+      <p class="hint">
+        Hint: When executing these operations for the first time, do not forget
+        to enter the password to grant root permission from the terminal screen.
+      </p>
+    </main>
+  </body>
+</html>

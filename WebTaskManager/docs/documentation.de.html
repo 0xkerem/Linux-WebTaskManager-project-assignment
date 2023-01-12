@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./content/documentation.css" />
+    <title>Dokumentation</title>
+  </head>
+  <body>
+    <aside>
+      <ol>
+        <li>
+          <a href="#wtm">WebTaskManager</a>
+          <ol class="h2-li">
+            <li><a href="#structure">Struktur der App</a></li>
+          </ol>
+        </li>
+        <li><a href="#getting-started">Einstieg</a></li>
+        <li>
+          <a href="#system-info">Systeminformationen</a>
+          <ol class="h2-li">
+            <li><a href="#loadavg">Durchschnittslast</a></li>
+            <li><a href="#cpu-load">CPU Last</a></li>
+            <li><a href="#sb">Systemtasten</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="#command-block">Abschnitt Befehlsblock</a>
+          <ol class="h2-li">
+            <li><a href="#run">Run command</a></li>
+            <li><a href="#kill">Kill Command</a></li>
+            <li><a href="#update">Aktualisierung der Tabelle</a></li>
+          </ol>
+        </li>
+      </ol>
+      <p id="lang">
+        <a href="./documentation.html"
+          ><span style="color: #bf0d3e">Eng</span
+          ><span style="color: #041e42">lish</span></a
+        >
+      </p>
+    </aside>
+    <main>
+      <h1 id="wtm">WebTaskManager</h1>
+      <p>
+        WebTaskManager ist ein einfacher Task-Manager, der in einem Webbrowser
+        ausgeführt wird. Es ist mit HTML, CSS und JavaScript für das Frontend
+        konzipiert und es werden keine vorgefertigten Tools oder zusätzliche
+        Bibliotheken verwendet, alle Codes werden von Hand geschrieben.
+        Serverseitig kommen C, C++ und eine C-Bibliothek libhttp zum Einsatz. Es
+        ist kein zusätzlicher Download erforderlich. Externe Bibliotheksdateien
+        und ihre Details sind in der folgenden Tabelle aufgeführt. Getestet in
+        den Browsern Chrome und Firefox auf virtuellen Maschinen mit 2 und 4
+        CPUs.
+      </p>
+      <h2 id="structure">Struktur der App</h2>
+      <center>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="4">Main</th>
+              <th colspan="3">Frontend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>server.c</td>
+              <td>runCommand.c</td>
+              <td>updateProcess.c</td>
+              <td>limitCpuLoad.cpp</td>
+              <td>app.js</td>
+              <td>index.html</td>
+              <td>style.css</td>
+            </tr>
+            <tr>
+              <td>457 Zeilen</td>
+              <td>100 Zeilen</td>
+              <td>115 Zeilen</td>
+              <td>49 Zeilen</td>
+              <td>635 Zeilen</td>
+              <td>240 Zeilen</td>
+              <td>178 Zeilen</td>
+            </tr>
+          </tbody>
+        </table>
+      </center>
+      <p>
+        Die Dateien im Ordner data_files dienen dem Datenaustausch zwischen
+        Frontend und Backend.
+      </p>
+      <h1 id="getting-started">Einstieg</h1>
+      <p>
+        Um die Anwendung zu starten, genügt es, in der Kommandozeile
+        <strong>„make“</strong>
+        einzugeben. Drücken Sie zweimal die Eingabetaste oder verwenden Sie die
+        Tastenkombination Strg + C, um das Programm zu schließen.
+      </p>
+      <p>
+        Das Programm besteht aus 4 Hauptabschnitten, Systeminfo, Befehlsblock,
+        Einstellungen und Protokolle.
+      </p>
+      <p>
+        Der Abschnitt Systeminfo zeigt uns den Lastdurchschnitt der letzten 1
+        Minute, die Lasten (%) aller CPUs und die Systemverfügbarkeit. Dieser
+        Abschnitt enthält auch Schaltflächen zum Neustarten, Herunterfahren und
+        Abbrechen dieser Vorgänge.
+      </p>
+      <p>
+        Und der zweite Teil für das gesamte Prozessmanagement. In diesem
+        Abschnitt gibt es eine Eingabe, in der wir die Befehle zum Starten des
+        Terminals eingeben, und eine Eingabe, in der wir diese Prozesse gemäß
+        dem Namen oder der Prozess-ID beenden können. Darüber hinaus gibt es
+        eine Tabelle, die Informationen zu den von uns ausgeführten Prozessen
+        enthält und es uns ermöglicht, einige Operationen darauf auszuführen.
+      </p>
+      <p>
+        Die verbleibenden zwei Abschnitte ermöglichen es uns, kleinere
+        Anpassungen an der Seite vorzunehmen und die von der Anwendung
+        erstellten Protokolle anzuzeigen.
+      </p>
+      <img src="./content/sections.png" alt="sections" />
+
+      <h1 id="system-info">Systeminformationen</h1>
+      <h2 id="loadavg">Durchschnittslast</h2>
+      <p>
+        Load Average-Daten werden aus der Datei /proc/loadavg ( server.c 168-182
+        ) gelesen und in der Datei loadavg.json im json-Datenformat mit der
+        eingehenden Serveranforderung gespeichert. Dann liest das Frontend diese
+        Daten und zeigt sie auf dem Bildschirm an ( app.js 183-195 ).
+      </p>
+      <h2 id="cpu-load">CPU Last</h2>
+      <p>
+        Ich habe einen Algorithmus verwendet, um die Verarbeitungslast der Kerne
+        zu berechnen. Zuerst habe ich Daten aus der Datei /proc/stat gezogen.
+        Diese Datei enthält einige CPU-bezogene Daten. Wir benötigen die Daten
+        nach der ersten Zeile (server.c 108-136).
+      </p>
+      <img class="img2" src="./content/procstat.png" alt="proc-stat" />
+      <p>
+        Die Daten werden dann durch Zeichenfolgenoperationen angeordnet und in
+        einem Array aufgelistet, um Berechnungen durchzuführen. Die Bedeutung
+        dieser Daten;
+      </p>
+      <ul>
+        <li>
+          1. Spalte: user = normale Prozesse, die im Benutzermodus ausgeführt
+          werden
+        </li>
+        <li>
+          2. Spalte: nice = nette Prozesse, die im Benutzermodus ausgeführt
+          werden
+        </li>
+        <li>
+          3. Spalte: system = Prozesse, die im Kernelmodus ausgeführt werden
+        </li>
+        <li>4. Spalte : idle = Däumchen drehen</li>
+        <li>5. Spalte: iowait = warten auf Abschluss der E/A</li>
+        <li>6. Spalte: irq = Interrupts bedienen</li>
+        <li>7. Spalte: Softirq = Softirqs bedienen</li>
+      </ul>
+      <p>
+        Für die Berechnung wird folgende Berechnung im Double-Datentyp verwendet
+        ( server.c 149-166):
+      </p>
+      <p>u = user + system</p>
+      <p>t = user + system + idle</p>
+      <p>
+        Dann wird 1 Sekunde gewartet und die Änderungen dieser Daten gemessen.
+      </p>
+      <p>(u1-u0) * 100 / (t1- t0)</p>
+      <p>Die resultierenden Daten zeigen die CPU-Last.</p>
+      <p>
+        <strong
+          >Kontrolltests dieser Daten wurden mit gnome-system-monitor
+          durchgeführt und die resultierenden Daten sind gleich.</strong
+        >
+      </p>
+      <p>
+        Dieser Vorgang wird für jede CPU durchgeführt und in der Datei load.json
+        als json-Array gespeichert. Das erste Element dieses Arrays ist die
+        Anzahl der Prozessoren, die mit dem Befehl
+        <strong>„nproc“</strong> empfangen werden. Die Antwort auf die
+        eingehende Ajax-HTTP-Anforderung wird vom Frontend aktualisiert und
+        gelesen und auf dem Bildschirm angezeigt ( app.js 98-123 ).
+      </p>
+      <h3>
+        Warum habe ich mich entschieden, zu Beginn dieser Berechnung 1 Sekunde
+        zu warten?
+      </h3>
+      <p>
+        Da der Server auf unserem Gerät läuft, nutzt er die Ressourcen unseres
+        Systems. Dies bedeutet, dass viele Serveranforderungen für viele auf dem
+        Bildschirm aktualisierte Daten zusammen mit der CPU-Auslastung gesendet
+        werden. Als Ergebnis dieser Situation zeigt es einen höheren Wert als es
+        sein sollte, da die CPU-Auslastung sofort ansteigt. Deshalb hielt ich es
+        für angebracht, am Anfang eine Sekunde zu warten.
+      </p>
+      <h2 id="sb">System Buttons</h2>
+      <p>
+        Reboot ( server.c 299-308 ), Shutdown ( server.c 308-318 buttons send a
+        request and these requests trigger the commands between the lines
+        specified.
+      </p>
+      <img class="img3" src="./content/query.png" alt="query" />
+      <p>
+        Die Schaltflächen Reboot ( server.c 299-308 ), Shutdown ( server.c
+        308-318 ) senden eine Anfrage und diese Anfragen lösen die Befehle
+        zwischen den angegebenen Zeilen aus.
+      </p>
+      <p>
+        Die Schaltfläche Abbrechen ( server.c 318-321 ) löst den Befehl
+        "shutdown -c" aus.
+      </p>
+      <h1 id="command-block">Abschnitt Befehlsblock</h1>
+      <h2 id="run">Run command</h2>
+      <p>
+        Das Absenden dieses Formulars sendet eine Anfrage an den Server und
+        sendet den Eingabewert als Parameter. Die Datei server.c dekodiert
+        diesen Parameter, übergibt ihn an die Datei runCommand und führt ihn aus
+        ( server.c 321-331 ). Gleichzeitig wird die ID des laufenden Prozesses
+        an die Datei pinfo.txt gesendet, bevor er an die Datei runCommand
+        ausgeführt wird. „runCommand“ liest diese Informationen und führt einige
+        Funktionen aus, um den Namen des Befehls, die Auslastung des Prozesses
+        und die zulässigen CPUs davon zu erhalten. Dies ist der erste Schritt
+        beim Erstellen der Tabelle. Diese Daten werden kompiliert und im
+        JSON-Format ( runCommand.c 92-100 ) in die Datei processinfo.json
+        geschrieben. Mit diesen ersten Daten wird die Tabellenzeile generiert
+        und auf dem Bildschirm angezeigt ( app.js 284-332 ).
+      </p>
+      <h2 id="kill">Kill Command</h2>
+      <p>
+        Der Prozess der Beendigung einer Transaktion ist recht einfach. Zunächst
+        wird beim Absenden des Formulars geprüft, ob der Wert eine Zahl ist und
+        dementsprechend ein anderer Ajax-HTTP-Request gesendet ( app.js 153-206
+        ). Das Backend verwendet die pkill-Methode, wenn es eine
+        Kill-Anforderung mit Namen erhält, ansonsten verwendet es einige
+        C-Funktionen ( server.c 331-339 ).
+      </p>
+      <p class="hint">
+        Tipp: Sie können es automatisch an das Kill-Befehlsformular weiterleiten
+        lassen, indem Sie in der Tabelle auf die ID eines Prozesses
+        doppelklicken.
+      </p>
+      <img src="./content/double-click.png" alt="double-click" />
+      <h2 id="update">Aktualisierung der Tabelle</h2>
+      <p>
+        Moderne Browser stellen uns
+        <strong>lokale Speicher- und Sitzungsspeicherfunktionen</strong> zur
+        Verfügung, die wir als lokale Datenbank verwenden können, Daten im
+        lokalen Speicher werden aufbewahrt, bis der Browserverlauf gelöscht
+        wird, und Daten im Sitzungsspeicher werden aufbewahrt, bis der Browser
+        geschlossen wird. Aus diesem Grund habe ich in diesem Projekt einige
+        Male Session Storage verwendet.
+      </p>
+      <img src="./content/local-database.png" alt="local-database" />
+      <p>
+        Um den Eingabewert nicht zu verlieren, wenn die Seite in den Abschnitten
+        Run Command, Kill Command, Logs und Settings aktualisiert wird, habe ich
+        ihn in der lokalen Datenbank gespeichert.
+      </p>
+      <p>
+        Wenn die Einstellung „Seite aktualisieren“ im Abschnitt „Einstellungen“
+        aktiviert ist, werden die CPU-Auslastung, die durchschnittliche
+        Auslastung, die Betriebszeit, die Protokolle und der Tabellenteil im
+        ausgewählten Zeitraum aktualisiert. Und die erforderlichen Daten werden
+        aus der lokalen Datenbank abgerufen. Aber diese Phase erfordert einige
+        zusätzliche Backend-Fortschritte. Zunächst wird die Transaktions-ID als
+        Parameter mit der Anfrage gesendet. Diese ID wird in updateProcess
+        behandelt und durchläuft fast die gleichen Phasen wie runCommand. Durch
+        Abrufen der resultierenden Daten aus der Datei „updatedinfo.json“ werden
+        sie dann im Tabellenarray im Sitzungsspeicher aktualisiert. Es wird auf
+        dem Bildschirm angezeigt, wenn die Seite aktualisiert wird.
+      </p>
+      <h3>
+        Wie erhalten runCommand- und updateProcess-Dateien die erforderlichen
+        Daten?
+      </h3>
+      <p>
+        Die Datei "/proc/&lt;pid&gt;/comm" wird gelesen, um den Namen des
+        Befehls zu erhalten. Für die CPU-Auslastung des Prozesses wird der
+        Befehl "top -b -n 2 -d 1 -p %d | tail -1 | awk '{print $9}' >
+        "./data_files/load.txt" ausgeführt und dann der Wert Um die vom Prozess
+        aktiv verwendete CPU zu sehen, muss der Befehl "ps -o psr -p &lt;pid&gt;
+        > ./data_files/psr.txt“ wird ausgeführt und Daten werden aus der
+        erforderlichen Datei gezogen, und die gleichen Prozesse listen auch die
+        CPU auf, zu deren Verwendung der Prozess berechtigt ist. Dieses Mal wird
+        der Befehl „taskset -pc &lt;pid&gt; > ./data_files/allowedcpus.txt“
+        verwendet.
+      </p>
+      <h3>Wie ändere ich die CPU-Last und die aktive CPU?</h3>
+      <p>
+        Um die CPU-Auslastung eines Prozesses zu begrenzen, reicht es aus, in
+        der erforderlichen Eingabe in der Tabelle einen Wert zwischen 0 und 100
+        einzugeben und die Eingabetaste zu drücken. Dann wird eine Anfrage an
+        den Server gesendet und die Datei limitCPULoad ausgeführt ( server.c
+        375-393 ).
+      </p>
+      <p>
+        Diese Datei wandelt die Planungsrichtlinie des Prozesses in
+        sched_deadline um und fügt der Einschränkung einige zusätzliche Schritte
+        hinzu.
+      </p>
+      <p>
+        Ein ähnlicher obiger Prozess wird verwendet, um die aktive CPU zu
+        ändern. Nachdem Sie die Daten gesendet haben, wird diese Anfrage im
+        Backend verarbeitet und zunächst die Scheduling Policy mit sched_other
+        mit dem Befehl „sudo chrt -o -p 0 &lt;pid&gt;“ aktualisiert. Dann der
+        Befehl "taskset -pc &lt;affinity&gt; &lt;pid&gt;" ausgeführt und der
+        Prozess abgeschlossen ( server.c 349-375 ).
+      </p>
+      <p class="hint">
+        Hinweis: Wenn Sie diese Vorgänge zum ersten Mal ausführen, vergessen Sie
+        nicht, das Passwort einzugeben, um die Root-Berechtigung vom
+        Terminalbildschirm aus zu erteilen.
+      </p>
+    </main>
+  </body>
+</html>
